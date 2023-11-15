@@ -1,9 +1,17 @@
 package org.home.dto;
 
-import lombok.EqualsAndHashCode;
-import org.home.entity.Guest;
-import org.home.entity.PaymentStatus;
+import java.util.Objects;
 
-@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
-public record InvoiceDto(@EqualsAndHashCode.Include Long id, String guestInfo, String paymentStatus) {
+public record InvoiceDto(Long id, Long guestId, String guestInfo, String paymentStatus) {
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    InvoiceDto that = (InvoiceDto) o;
+    return Objects.equals(id, that.id);
+  }
+
+  public int hashCode() {
+    return Objects.hash(id);
+  }
 }

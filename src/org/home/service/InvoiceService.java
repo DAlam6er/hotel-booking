@@ -20,7 +20,8 @@ public class InvoiceService {
 
   public List<InvoiceDto> findAll() {
     return invoiceDao.findAll().stream()
-        .map(invoice -> new InvoiceDto(invoice.getId(), invoice.getGuest().toString(), invoice.getPaymentStatus().getStatus()))
+        .map(invoice -> new InvoiceDto(invoice.getId(), invoice.getGuest().getId(),
+            invoice.getGuest().toString(), invoice.getPaymentStatus().getStatus()))
         .collect(toList());
   }
 }

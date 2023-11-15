@@ -68,6 +68,9 @@ public class GuestDao implements Dao<Long, Guest> {
   }
 
   private Guest buildGuest(ResultSet resultSet) throws SQLException {
+    var checkIn = resultSet.getTimestamp("check_in");
+    var checkOut = resultSet.getTimestamp("check_out");
+    var durationOfStay = resultSet.getShort("duration_of_stay");
     return Guest.builder()
         .id(resultSet.getLong("id"))
         .lastName(resultSet.getString("last_name"))
@@ -78,9 +81,9 @@ public class GuestDao implements Dao<Long, Guest> {
         .address(resultSet.getString("address"))
         .passNo(resultSet.getString("pass_no"))
         .maritalStatus(MaritalStatus.valueOf(resultSet.getString("marital_status")))
-        .checkIn(resultSet.getTimestamp("check_in").toLocalDateTime())
-        .checkOut(resultSet.getTimestamp("check_out").toLocalDateTime())
-        .durationOfStay((int) resultSet.getShort("duration_of_stay"))
+        .checkIn(checkIn != null ? checkIn.toLocalDateTime() : null)
+        .checkOut(checkOut != null ? checkOut.toLocalDateTime() : null)
+        .durationOfStay(durationOfStay != 0 ? (int) durationOfStay : null)
         .build();
   }
 

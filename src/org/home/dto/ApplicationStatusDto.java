@@ -1,7 +1,18 @@
 package org.home.dto;
 
-import lombok.EqualsAndHashCode;
+import java.util.Objects;
 
-@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
-public record ApplicationStatusDto(@EqualsAndHashCode.Include Integer id, String status){
+public record ApplicationStatusDto(Integer id, String status) {
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    ApplicationStatusDto that = (ApplicationStatusDto) o;
+    return Objects.equals(id, that.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id);
+  }
 }

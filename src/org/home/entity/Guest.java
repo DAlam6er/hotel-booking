@@ -4,22 +4,22 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+
+import static java.time.format.DateTimeFormatter.ofLocalizedDate;
+import static java.time.format.FormatStyle.SHORT;
 
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString(onlyExplicitlyIncluded = true)
 @Getter @Setter
 public class Guest {
   private Long id;
-  @ToString.Include
   private String lastName;
-  @ToString.Include
   private String firstName;
-  @ToString.Include
   private String surname;
-  @ToString.Include
   private LocalDate birthday;
   private Gender gender;
   private String address;
@@ -28,4 +28,10 @@ public class Guest {
   private LocalDateTime checkIn;
   private LocalDateTime checkOut;
   private Integer durationOfStay;
+
+  @Override
+  public String toString() {
+    var fio = String.join(" ", lastName, firstName, surname);
+    return String.join(", ", fio, birthday.format(ofLocalizedDate(SHORT)));
+  }
 }
