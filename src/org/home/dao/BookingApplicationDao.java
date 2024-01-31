@@ -2,8 +2,8 @@ package org.home.dao;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.SneakyThrows;
 import org.home.entity.BookingApplication;
-import org.home.exception.DaoException;
 import org.home.util.ConnectionPool;
 
 import java.sql.ResultSet;
@@ -35,6 +35,7 @@ public class BookingApplicationDao implements Dao<Long, BookingApplication> {
   }
 
   @Override
+  @SneakyThrows
   public List<BookingApplication> findAll() {
     List<BookingApplication> bookingApplications = new ArrayList<>();
     try (var connection = ConnectionPool.get();
@@ -43,8 +44,6 @@ public class BookingApplicationDao implements Dao<Long, BookingApplication> {
       while (resultSet.next()) {
         bookingApplications.add(buildBookingApplication(resultSet));
       }
-    } catch (SQLException ex) {
-      throw new DaoException(ex);
     }
     return bookingApplications;
   }

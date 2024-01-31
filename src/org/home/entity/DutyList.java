@@ -1,6 +1,7 @@
 package org.home.entity;
 
 import lombok.*;
+import org.home.entity.enums.WeekDay;
 
 import java.time.LocalDateTime;
 

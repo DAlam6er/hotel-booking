@@ -2,8 +2,8 @@ package org.home.dao;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.SneakyThrows;
 import org.home.entity.ApplicationStatus;
-import org.home.exception.DaoException;
 import org.home.util.ConnectionPool;
 
 import java.sql.Connection;
@@ -33,6 +33,7 @@ public class ApplicationStatusDao implements Dao<Integer, ApplicationStatus> {
   }
 
   @Override
+  @SneakyThrows
   public List<ApplicationStatus> findAll() {
     List<ApplicationStatus> applicationStatuses = new ArrayList<>();
     try (var connection = ConnectionPool.get();
@@ -41,21 +42,19 @@ public class ApplicationStatusDao implements Dao<Integer, ApplicationStatus> {
       while (resultSet.next()) {
         applicationStatuses.add(buildApplicationStatus(resultSet));
       }
-    } catch (SQLException ex) {
-      throw new DaoException(ex);
     }
     return applicationStatuses;
   }
 
   @Override
+  @SneakyThrows
   public Optional<ApplicationStatus> findById(Integer id) {
     try (var connection = ConnectionPool.get()) {
       return findById(id, connection);
-    } catch (SQLException ex) {
-      throw new DaoException(ex);
     }
   }
 
+  @SneakyThrows
   public Optional<ApplicationStatus> findById(Integer id, Connection connection) {
     try (var preparedStatement = connection.prepareStatement(FIND_BY_ID_SQL)) {
       preparedStatement.setInt(1, id);
@@ -66,8 +65,6 @@ public class ApplicationStatusDao implements Dao<Integer, ApplicationStatus> {
         applicationStatus = buildApplicationStatus(resultSet);
       }
       return Optional.ofNullable(applicationStatus);
-    } catch (SQLException e) {
-      throw new DaoException(e);
     }
   }
 

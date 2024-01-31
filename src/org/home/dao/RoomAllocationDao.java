@@ -2,11 +2,10 @@ package org.home.dao;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.SneakyThrows;
 import org.home.entity.RoomAllocation;
-import org.home.exception.DaoException;
 import org.home.util.ConnectionPool;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -46,39 +45,32 @@ public class RoomAllocationDao implements Dao<Long, RoomAllocation> {
     return Optional.empty();
   }
 
+  @SneakyThrows
   public Optional<RoomAllocation> findByGuestId(Long guestId) {
     try (var connection = ConnectionPool.get();
-         var preparedStatement = connection.prepareStatement(FIND_BY_GUEST_ID_SQL))
-    {
+         var preparedStatement = connection.prepareStatement(FIND_BY_GUEST_ID_SQL)) {
       preparedStatement.setLong(1, guestId);
       return findById(preparedStatement);
-    } catch (SQLException ex) {
-      throw new DaoException(ex);
     }
   }
 
+  @SneakyThrows
   public Optional<RoomAllocation> findByRoomId(String roomId) {
     try (var connection = ConnectionPool.get();
-         var preparedStatement = connection.prepareStatement(FIND_BY_ROOM_ID_SQL))
-    {
+         var preparedStatement = connection.prepareStatement(FIND_BY_ROOM_ID_SQL)) {
       preparedStatement.setString(1, roomId);
       return findById(preparedStatement);
-    } catch (SQLException ex) {
-      throw new DaoException(ex);
     }
   }
 
+  @SneakyThrows
   private Optional<RoomAllocation> findById(PreparedStatement preparedStatement) {
-    try {
-      var resultSet = preparedStatement.executeQuery();
-      RoomAllocation roomAllocation = null;
-      if (resultSet.next()) {
-        roomAllocation = buildRoomAllocation(resultSet);
-      }
-      return Optional.ofNullable(roomAllocation);
-    } catch (SQLException ex) {
-      throw new DaoException(ex);
+    var resultSet = preparedStatement.executeQuery();
+    RoomAllocation roomAllocation = null;
+    if (resultSet.next()) {
+      roomAllocation = buildRoomAllocation(resultSet);
     }
+    return Optional.ofNullable(roomAllocation);
   }
 
   private RoomAllocation buildRoomAllocation(ResultSet resultSet) throws SQLException {

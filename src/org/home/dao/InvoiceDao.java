@@ -2,8 +2,8 @@ package org.home.dao;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.SneakyThrows;
 import org.home.entity.Invoice;
-import org.home.exception.DaoException;
 import org.home.util.ConnectionPool;
 
 import java.sql.ResultSet;
@@ -29,6 +29,7 @@ public class InvoiceDao implements Dao<Long, Invoice> {
   }
 
   @Override
+  @SneakyThrows
   public List<Invoice> findAll() {
     List<Invoice> invoices = new ArrayList<>();
     try (var connection = ConnectionPool.get();
@@ -37,8 +38,6 @@ public class InvoiceDao implements Dao<Long, Invoice> {
       while (resultSet.next()) {
         invoices.add(buildInvoice(resultSet));
       }
-    } catch (SQLException ex) {
-      throw new DaoException(ex);
     }
     return invoices;
   }

@@ -2,9 +2,8 @@ package org.home.dao;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.home.entity.Guest;
+import lombok.SneakyThrows;
 import org.home.entity.RoomAgeType;
-import org.home.exception.DaoException;
 import org.home.util.ConnectionPool;
 
 import java.sql.Connection;
@@ -34,14 +33,14 @@ public class RoomAgeTypeDao implements Dao<Integer, RoomAgeType> {
   }
 
   @Override
+  @SneakyThrows
   public Optional<RoomAgeType> findById(Integer id) {
     try (var connection = ConnectionPool.get()) {
       return findById(id, connection);
-    } catch (SQLException e) {
-      throw new DaoException(e);
     }
   }
 
+  @SneakyThrows
   public Optional<RoomAgeType> findById(Integer id, Connection connection) {
     try (var preparedStatement = connection.prepareStatement(FIND_BY_ID_SQL)) {
       preparedStatement.setInt(1, id);
@@ -52,8 +51,6 @@ public class RoomAgeTypeDao implements Dao<Integer, RoomAgeType> {
         roomAgeType = buildRoomAgeType(resultSet);
       }
       return Optional.ofNullable(roomAgeType);
-    } catch (SQLException e) {
-      throw new DaoException(e);
     }
   }
 

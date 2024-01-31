@@ -2,8 +2,8 @@ package org.home.dao;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.SneakyThrows;
 import org.home.entity.Employee;
-import org.home.exception.DaoException;
 import org.home.util.ConnectionPool;
 
 import java.sql.Connection;
@@ -39,14 +39,14 @@ public class EmployeeDao implements Dao<Long, Employee> {
   }
 
   @Override
+  @SneakyThrows
   public Optional<Employee> findById(Long id) {
     try (var connection = ConnectionPool.get()) {
       return findById(id, connection);
-    } catch (SQLException ex) {
-      throw new DaoException(ex);
     }
   }
 
+  @SneakyThrows
   public Optional<Employee> findById(Long id, Connection connection) {
     try (var preparedStatement = connection.prepareStatement(FIND_BY_ID_SQL)) {
       preparedStatement.setLong(1, id);
@@ -57,8 +57,6 @@ public class EmployeeDao implements Dao<Long, Employee> {
         employee = buildEmployee(resultSet);
       }
       return Optional.ofNullable(employee);
-    } catch (SQLException ex) {
-      throw new DaoException(ex);
     }
   }
 

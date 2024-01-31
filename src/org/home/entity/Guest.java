@@ -1,11 +1,11 @@
 package org.home.entity;
 
 import lombok.*;
+import org.home.entity.enums.Gender;
+import org.home.entity.enums.MaritalStatus;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 
 import static java.time.format.DateTimeFormatter.ofLocalizedDate;
 import static java.time.format.FormatStyle.SHORT;

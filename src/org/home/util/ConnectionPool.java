@@ -1,7 +1,6 @@
 package org.home.util;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 
 import java.lang.reflect.Proxy;
 import java.sql.Connection;
@@ -13,7 +12,7 @@ import java.util.Objects;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 public final class ConnectionPool {
   private static final String DRIVER_KEY = "db.driver";
   private static final Integer DEFAULT_POOL_SIZE = 10;

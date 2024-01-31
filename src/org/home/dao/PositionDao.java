@@ -2,12 +2,11 @@ package org.home.dao;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.SneakyThrows;
 import org.home.entity.Position;
-import org.home.exception.DaoException;
 import org.home.util.ConnectionPool;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -34,14 +33,14 @@ public class PositionDao implements Dao<Integer, Position> {
   }
 
   @Override
+  @SneakyThrows
   public Optional<Position> findById(Integer id) {
     try (var connection = ConnectionPool.get()) {
       return findById(id, connection);
-    } catch (SQLException ex) {
-      throw new DaoException(ex);
     }
   }
 
+  @SneakyThrows
   public Optional<Position> findById(Integer id, Connection connection) {
     try (var preparedStatement = connection.prepareStatement(FIND_BY_ID_SQL)) {
       preparedStatement.setInt(1, id);
@@ -52,8 +51,6 @@ public class PositionDao implements Dao<Integer, Position> {
         position = buildPosition(resultSet);
       }
       return Optional.ofNullable(position);
-    } catch (SQLException ex) {
-      throw new DaoException(ex);
     }
   }
 

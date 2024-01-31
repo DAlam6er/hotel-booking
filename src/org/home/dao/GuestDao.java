@@ -2,10 +2,10 @@ package org.home.dao;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.home.entity.Gender;
+import lombok.SneakyThrows;
+import org.home.entity.enums.Gender;
 import org.home.entity.Guest;
-import org.home.entity.MaritalStatus;
-import org.home.exception.DaoException;
+import org.home.entity.enums.MaritalStatus;
 import org.home.util.ConnectionPool;
 
 import java.sql.Connection;
@@ -44,14 +44,14 @@ public class GuestDao implements Dao<Long, Guest> {
   }
 
   @Override
+  @SneakyThrows
   public Optional<Guest> findById(Long id) {
     try (var connection = ConnectionPool.get()) {
       return findById(id, connection);
-    } catch (SQLException e) {
-      throw new DaoException(e);
     }
   }
 
+  @SneakyThrows
   public Optional<Guest> findById(Long id, Connection connection) {
     try (var preparedStatement = connection.prepareStatement(FIND_BY_ID_SQL)) {
       preparedStatement.setLong(1, id);
@@ -62,8 +62,6 @@ public class GuestDao implements Dao<Long, Guest> {
         guest = buildGuest(resultSet);
       }
       return Optional.ofNullable(guest);
-    } catch (SQLException e) {
-      throw new DaoException(e);
     }
   }
 
